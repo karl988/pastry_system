@@ -1,0 +1,39 @@
+CREATE DATABASE IF NOT EXISTS pastry_db;
+USE pastry_db;
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  first_name VARCHAR(50) NOT NULL,
+  last_name VARCHAR(50) NOT NULL,
+  address VARCHAR(255),
+  age INT,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE pastries (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  price DECIMAL(10,2) NOT NULL,
+  added_by INT,
+  last_updated_by INT,
+  last_updated TIMESTAMP NULL DEFAULT NULL,
+  date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (last_updated_by) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE ingredients (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  pastry_id INT NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  quantity VARCHAR(50),
+  added_by INT,
+  last_updated_by INT,
+  last_updated TIMESTAMP NULL DEFAULT NULL,
+  date_added TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (pastry_id) REFERENCES pastries(id) ON DELETE CASCADE,
+  FOREIGN KEY (added_by) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (last_updated_by) REFERENCES users(id) ON DELETE SET NULL
+);
